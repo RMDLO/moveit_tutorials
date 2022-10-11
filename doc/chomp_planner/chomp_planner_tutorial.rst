@@ -34,7 +34,7 @@ If you have the ``panda_moveit_config`` from the `ros-planning/panda_moveit_conf
 
 Running CHOMP with Obstacles in the Scene
 +++++++++++++++++++++++++++++++++++++++++
-To run CHOMP in an environment with obstacles, you can run the sample python script:
+To run CHOMP in an evironment with obstacles, you can run the sample python script:
 
   :codedir:`collision_scene_example.py<collision_environments/scripts/collision_scene_example.py>`.
 
@@ -52,76 +52,49 @@ or: ::
 
   rosrun moveit_tutorials collision_scene_example.py sparse
 
-Next, in RViz, select CHOMP in the MotionPlanning panel under the Context tab. Set the desired start and goal states by moving the end-effector around with the imarker and then click on the Plan button under the Planning tab in the MotionPlanning panel to start planning. The planner will now attempt to find a feasible solution between the given start and end position.
+Next, in RViz, select CHOMP in the MotionPlanning pannel under the Context tab. Set the desired start and goal states by moving the end-effector around with the imarker and then click on the Plan button under the Planning tab in the MotionPlanning pannel to start planning. The planner will now attempt to find a feasible solution between the given start and end position.
 
 Tweaking some of the parameters for CHOMP
 -----------------------------------------
 CHOMP has some optimization parameters associated with it. These can be modified for the given environment/robot you are working with and is normally present in the :panda_codedir:`chomp_planning.yaml <config/chomp_planning.yaml>` file in config folder of the robot you are working with. If this file does not exist for your robot, you can create it and set the parameter values as you want. The following are some of the insights to set up these parameter values for some of them:
 
-- **planning_time_limit**: ::
-  The maximum time the optimizer can take to find a solution before terminating
+- *planning_time_limit*: the maximum time the optimizer can take to find a solution before terminating
 
-- **max_iterations**: ::
-  This is the maximum number of iterations that the planner can take to find a good solution while optimization
+- *max_iterations*: this is the maximum number of iterations that the planner can take to find a good solution while optimization
 
-- **max_iterations_after_collision_free**: ::
-  Maximum iterations to be performed after a collision-free path is found.
+- *max_iterations_after_collision_free*: maximum iterations to be performed after a collision-free path is found.
 
-- **smoothness_cost_weight**:  ::
-  The smoothness_cost_weight parameters controls its weight in the final cost that CHOMP is actually optimizing over.
+- *smoothness_cost_weight*:  the smoothness_cost_weight parameters controls its weight in the final cost that CHOMP is actually optimizing over
 
-- **obstacle_cost_weight**: ::
-  This controls the weight to be given to obstacles towards the final cost CHOMP optimizes over. e.g., 0.0 would have obstacles to be ignored, 1.0 would be a hard constraint
+- *obstacle_cost_weight*: this controls the weight to be given to obstacles towards the final cost CHOMP optimizes over. e.g., 0.0 would have obstacles to be ignored, 1.0 would be a hard constraint
 
-- **learning_rate**: ::
-  This is the learning rate used by the optimizer to find the local / global minima while reducing the total cost.
+- *learning_rate*: this is the learning rate used by the optimizer to find the local / global minima while reducing the total cost.
 
-- **smoothness_cost_velocity, smoothness_cost_acceleration, smoothness_cost_jerk**: ::
-  Variables associated with the cost in velocity, acceleration and jerk.
+- *smoothness_cost_velocity, smoothness_cost_acceleration, smoothness_cost_jerk*: variables associated with the cost in velocity, acceleration and jerk.
 
-- **ridge_factor**: ::
-  The noise added to the diagonal of the total :moveit_codedir:`quadratic cost matrix<moveit_planners/chomp/chomp_motion_planner/src/chomp_cost.cpp#L62/>` in the objective function. Addition of small noise (e.g., 0.001) allows CHOMP to avoid obstacles at the cost of smoothness in trajectory.
+- *ridge_factor*: the noise added to the diagonal of the total :moveit_codedir:`quadratic cost matrix<moveit_planners/chomp/chomp_motion_planner/src/chomp_cost.cpp#L62/>` in the objective function. Addition of small noise (e.g., 0.001) allows CHOMP to avoid obstacles at the cost of smoothness in trajectory.
 
-- **use_pseudo_inverse**: ::
-  Enable pseudo inverse calculations or not.
+- *use_pseudo_inverse*: enable pseudo inverse calculations or not.
 
-- **pseudo_inverse_ridge_factor**: ::
-  Set the ridge factor if pseudo inverse is enabled.
+- *pseudo_inverse_ridge_factor*: set the ridge factor if pseudo inverse is enabled.
 
-- **joint_update_limit**: ::
-  Set the update limit for the robot joints
+- *joint_update_limit*: set the update limit for the robot joints
 
-- **collision_clearance**: ::
-  The minimum distance that needs to be maintained to avoid obstacles.
+- *collision_clearance*: the minimum distance that needs to be maintained to avoid obstacles.
 
-- **collision_threshold**: ::
-  The collision threshold cost that needs to be maintained to avoid collisions
+- *collision_threshold*: the collision threshold cost that needs to be maintained to avoid collisions
 
-- **use_stochastic_descent**: ::
-  Set this to true/false if you want to use stochastic descent while optimizing the cost. In stochastic descent, a random point from the trajectory is used, rather than all the trajectory points. This is faster and guaranteed to converge, but it may take more iterations in the worst case.
+- *use_stochastic_descent*: set this to true/false if you want to use stochastic descent while optimizing the cost. In stochastic descent, a random point from the trajectory is used, rather than all the trajectory points. This is faster and guaranteed to converge, but it may take more iterations in the worst case.
 
-- **enable failure recovery**: ::
-  If this is set to true, CHOMP tweaks certain parameters in the hope to find a solution when one does not exist with the default parameters specified in the ``chomp_planning.yaml`` file.
+- *enable failure recovery*: if this is set to true, CHOMP tweaks ceratin parameters in the hope to find a solution when one does not exist with the default paramters specified in the ``chomp_planning.yaml`` file.
 
-- **max_recovery_attempts**: ::
-  This is the maximum times that CHOMP is run with a varied set of parameters after the first attempt with the default parameters.
+- *max_recovery_attempts*: this is the maximum times that CHOMP is run with a varied set of parameters after the first attempt with the default parameters.
 
-- **trajectory_initializaiton_method**: ::
-  The type of initialization of the trajectory can be supplied here for CHOMP, this can be ``quintic-spline``, ``linear``, ``cubic`` or ``fillTrajectory``. The first three options refer to the interpolation methods used for trajectory initialization between start and goal states. ``fillTrajectory`` provides an option of initializing the trajectory from path computed from an existing motion planner like OMPL.
+- *trajectory_initializaiton_method*: the type of initialization of the trajectory can be supplied here for CHOMP, this can be ``quintic-spline``, ``linear``, ``cubic`` or ``fillTrajectory``. The first three options refer to the interpolation methods used for trajectory initialization between start and goal states. ``fillTrajectory`` provides an option of initializing the trajectory from path computed from an existing motion planner like OMPL.
 
 Choosing parameters for CHOMP requires some intuition that is informed by the planning environment. For instance, the default parameters for CHOMP work well in environments without obstacles; however, in environments with many obstacles the default parameters will likely cause CHOMP to get stuck in local minima. By tweaking parameters, we can improve the quality of plans generated by CHOMP.
 
-Some of the unused/commented parameters are:
-
-* hmc\_stochasticity
-* hmc\_annealing\_factor
-* hmc\_discretization
-* use\_hamiltonian\_montecarlo
-* animate\_endeffector
-* animate\_endeffector\_segment
-* animate\_path
-* random\_jump\_amount
-* add\_randomness
+Some of the unused/commented parameters are *hmc_stochasticity*, *hmc_annealing_factor*, *hmc_discretization*, *use_hamiltonian_montecarlo*, *animate_endeffector*, *animate_endeffector_segment*, *animate_path*, *random_jump_amount*, *add_randomness*.
 
 Difference between plans obtained by CHOMP and OMPL
 ---------------------------------------------------
@@ -144,12 +117,12 @@ To achieve this, follow the steps:
       <!-- load OMPL planning pipeline, but add the CHOMP planning adapter. -->
       <include file="$(find panda_moveit_config)/launch/ompl_planning_pipeline.launch.xml">
         <arg name="planning_adapters" value="
-           default_planner_request_adapters/AddTimeParameterization
            default_planner_request_adapters/FixWorkspaceBounds
            default_planner_request_adapters/FixStartStateBounds
            default_planner_request_adapters/FixStartStateCollision
            default_planner_request_adapters/FixStartStatePathConstraints
-           chomp/OptimizerAdapter"
+           chomp/OptimizerAdapter
+           default_planner_request_adapters/AddTimeParameterization"
            />
       </include>
       <!-- load chomp config -->
@@ -159,7 +132,7 @@ To achieve this, follow the steps:
     </launch>
 
 #. This launch file defines the new planning pipeline ``ompl-chomp``, deriving from the ``ompl`` pipeline,
-   but adding the CHOMP post-processor as a planning adapter. Also, the ``trajectory_initialization_method`` is overridden to use the OMPL-generated trajectory.
+   but adding the CHOMP post-processor as a planning adapter. Also, the ``trajectory_initialization_method`` is overriden to use the OMPL-generated trajectory.
 
 #. Now you can launch the newly configure planning pipeline as follows: ::
 

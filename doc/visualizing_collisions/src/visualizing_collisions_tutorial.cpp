@@ -44,11 +44,13 @@
 #include <moveit/robot_model/robot_model.h>
 #include <moveit/robot_state/robot_state.h>
 #include <moveit/planning_scene/planning_scene.h>
+#include <moveit/collision_detection_fcl/collision_world_fcl.h>
+#include <moveit/collision_detection_fcl/collision_robot_fcl.h>
 #include <moveit/collision_detection/collision_tools.h>
 
-planning_scene::PlanningScene* g_planning_scene = nullptr;
+planning_scene::PlanningScene* g_planning_scene = 0;
 shapes::ShapePtr g_world_cube_shape;
-ros::Publisher* g_marker_array_publisher = nullptr;
+ros::Publisher* g_marker_array_publisher = 0;
 visualization_msgs::MarkerArray g_collision_points;
 
 void help()
@@ -73,10 +75,10 @@ void help()
 void publishMarkers(visualization_msgs::MarkerArray& markers)
 {
   // delete old markers
-  if (!g_collision_points.markers.empty())
+  if (g_collision_points.markers.size())
   {
-    for (auto& marker : g_collision_points.markers)
-      marker.action = visualization_msgs::Marker::DELETE;
+    for (int i = 0; i < g_collision_points.markers.size(); i++)
+      g_collision_points.markers[i].action = visualization_msgs::Marker::DELETE;
 
     g_marker_array_publisher->publish(g_collision_points);
   }
@@ -85,7 +87,7 @@ void publishMarkers(visualization_msgs::MarkerArray& markers)
   std::swap(g_collision_points.markers, markers.markers);
 
   // draw new markers (if there are any)
-  if (!g_collision_points.markers.empty())
+  if (g_collision_points.markers.size())
     g_marker_array_publisher->publish(g_collision_points);
 }
 
@@ -124,7 +126,7 @@ void computeCollisionContactPoints(InteractiveRobot& robot)
   // iterate through **c_res.contacts** which is a std::map of contact points.
   // Look at the implementation of getCollisionMarkersFromContacts() in
   // `collision_tools.cpp
-  // <https://github.com/ros-planning/moveit/blob/noetic-devel/moveit_core/collision_detection/src/collision_tools.cpp>`_
+  // <https://github.com/ros-planning/moveit/blob/melodic-devel/moveit_core/collision_detection/src/collision_tools.cpp>`_
   // for how.
   if (c_res.collision)
   {
@@ -138,7 +140,7 @@ void computeCollisionContactPoints(InteractiveRobot& robot)
       color.a = 0.5;
       visualization_msgs::MarkerArray markers;
 
-      /* Get the contact points and display them as markers */
+      /* Get the contact ponts and display them as markers */
       collision_detection::getCollisionMarkersFromContacts(markers, "panda_link0", c_res.contacts, color,
                                                            ros::Duration(),  // remain until deleted
                                                            0.01);            // radius

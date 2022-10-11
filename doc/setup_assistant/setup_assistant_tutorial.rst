@@ -23,9 +23,9 @@ MoveIt and ROS
   first if you have not already done that.
 
 * If you haven't already done so, make sure you have the `Franka description
-  package <https://github.com/frankaemika/franka_ros>`_ for Noetic: ::
+  package <https://github.com/frankaemika/franka_ros>`_ for Melodic: ::
 
-    sudo apt install ros-noetic-franka-description
+    sudo apt-get install ros-melodic-franka-description
 
 * If you have the ``panda_moveit_config`` package already git-cloned from the *Getting Started* page, be sure to delete that now since this tutorial will teach you how to create it from scratch: ::
 
@@ -49,11 +49,11 @@ Step 1: Start
 
 .. image:: setup_assistant_start.png
 
-* Click on the browse button and navigate to the *panda_arm.urdf.xacro* file
+* Click on the browse button and navigate to the *panda_arm_hand.urdf.xacro* file
   installed when you installed the Franka package above. (This file
   gets installed in
-  /opt/ros/noetic/share/franka_description/robots/panda_arm.urdf.xacro on Ubuntu
-  with ROS Noetic.)  Choose that file and then click *Load Files*. The
+  /opt/ros/melodic/share/franka_description/robots/panda_arm_hand.urdf.xacro on Ubuntu
+  with ROS Melodic.)  Choose that file and then click *Load Files*. The
   Setup Assistant will load the files (this might take a few seconds)
   and present you with this screen:
 
@@ -169,8 +169,6 @@ Add the gripper
   * Click on the *Add Group* button.
 
   * Enter *Group Name* as **hand**
-
-  * Let *Kinematic Solver* stay at its default value; **None**.
 
   * Let *Kin. Search Resolution* and *Kin. Search Timeout* stay at their default values.
 

@@ -44,9 +44,6 @@
 #include <moveit/robot_model/robot_model.h>
 #include <moveit/robot_state/robot_state.h>
 #include <moveit_msgs/DisplayRobotState.h>
-
-#include <utility>
-
 #include "imarker.h"
 
 /** Keeps track of the state of the robot and the world.
@@ -66,7 +63,7 @@ public:
   const std::string& getGroupName() const;
 
   /** Set the pose of the group we are manipulating */
-  void setGroupPose(const Eigen::Isometry3d& pose);
+  bool setGroupPose(const Eigen::Isometry3d& pose);
 
   /** set pose of the world object */
   void setWorldObjectPose(const Eigen::Isometry3d& pose);
@@ -74,16 +71,16 @@ public:
   /** set a callback to call when updates occur */
   void setUserCallback(boost::function<void(InteractiveRobot& robot)> callback)
   {
-    user_callback_ = std::move(callback);
+    user_callback_ = callback;
   }
 
   /** access RobotModel */
-  moveit::core::RobotModelPtr& robotModel()
+  robot_model::RobotModelPtr& robotModel()
   {
     return robot_model_;
   }
   /** access RobotState */
-  moveit::core::RobotStatePtr& robotState()
+  robot_state::RobotStatePtr& robotState()
   {
     return robot_state_;
   }
@@ -135,11 +132,11 @@ private:
 
   /* robot info */
   robot_model_loader::RobotModelLoader rm_loader_;
-  moveit::core::RobotModelPtr robot_model_;
-  moveit::core::RobotStatePtr robot_state_;
+  robot_model::RobotModelPtr robot_model_;
+  robot_state::RobotStatePtr robot_state_;
 
   /* info about joint group we are manipulating */
-  const moveit::core::JointModelGroup* group_;
+  const robot_model::JointModelGroup* group_;
   Eigen::Isometry3d desired_group_end_link_pose_;
 
   /* world info */

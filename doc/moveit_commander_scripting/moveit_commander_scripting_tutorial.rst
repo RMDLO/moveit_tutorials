@@ -21,12 +21,11 @@ Now initiate the ``moveit_commander`` interface in another shell: ::
 
 Using the MoveIt Commander Command Line Tool
 ---------------------------------------------
-The first command you should type is: ::
+The command below will start a command line interface tool that allows you to connect to a running instance of the move_group node. The first command you should type is: ::
 
- use panda_arm
+ use <group name>
 
-where ``panda_arm`` is the group name which you want to command. This will connect you to a running instance of the move_group node. You can now execute commands on that group.
-
+This will connect to the move_group node for the group name you specified (in the Panda, for instance, you could connect to ``panda_arm``). You can now execute commands on that group.
 This command, ``current``, will show you the current state of your group: ::
 
  current
